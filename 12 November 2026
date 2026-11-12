@@ -1,0 +1,23 @@
+class ArrayQueue:
+    def __init__(self):
+        self.values = []
+        self.front = 0
+
+    def push(self, x):
+        self.values.append(x)
+
+    def pop(self):
+        answer = self.values[self.front]
+        self.front += 1
+
+        if self.front > 32 and self.front * 2 >= len(self.values):
+            self.values = self.values[self.front:]
+            self.front = 0
+
+        return answer
+
+    def peek(self):
+        return self.values[self.front]
+
+    def isEmpty(self):
+        return self.front == len(self.values)
