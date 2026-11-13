@@ -1,0 +1,14 @@
+class Solution:
+    def minToMaxHeap(self, nums):
+        for i in range(1, len(nums)):
+            child = i
+
+            while child > 0:
+                parent = (child - 1) // 2
+                if nums[parent] >= nums[child]:
+                    break
+
+                nums[parent], nums[child] = nums[child], nums[parent]
+                child = parent
+
+        return nums
