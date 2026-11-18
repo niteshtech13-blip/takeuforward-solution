@@ -1,0 +1,61 @@
+class Solution{
+public:
+    struct Node {
+        int child[2];
+        int count;
+
+        Node() {
+            child[0] = -1;
+            child[1] = -1;
+            count = 0;
+        }
+    };
+
+    vector<Node> trie;
+
+    void insertValue(int value) {
+        int node = 0;
+        trie[node].count++;
+
+        for (int bit = 30; bit >= 0; bit--) {
+            int currentBit = (value >> bit) & 1;
+            if (trie[node].child[currentBit] == -1) {
+                trie[node].child[currentBit] = (int)trie.size();
+                trie.push_back(Node());
+            }
+            node = trie[node].child[currentBit];
+            trie[node].count++;
+        }
+    }
+
+    int getCount(int value) {
+        int node = 0;
+
+        for (int bit = 30; bit >= 0; bit--) {
+            int currentBit = (value >> bit) & 1;
+            if (trie[node].child[currentBit] == -1) {
+                return 0;
+            }
+            node = trie[node].child[currentBit];
+        }
+
+        return trie[node].count;
+    }
+
+    int subarraysWithXorK(vector<int> &nums, int k) {
+        trie.clear();
+        trie.push_back(Node());
+        insertValue(0);
+
+        int prefix = 0;
+        int answer = 0;
+
+        for (int value : nums) {
+            prefix ^= value;
+            answer += getCount(prefix ^ k);
+            insertValue(prefix);
+        }
+
+        return answer;
+    }
+};
