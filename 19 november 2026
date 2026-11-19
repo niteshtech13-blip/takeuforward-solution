@@ -1,21 +1,22 @@
-class Solution {
-public:
-    vector<vector<int>> threeSum(vector<int>& nums) {
-        sort(nums.begin(), nums.end());
-        set<vector<int>> uniqueTriples;
-        int n = nums.size();
+from collections import Counter
 
-        for (int i = 0; i < n - 2; i++) {
-            for (int j = i + 1; j < n - 1; j++) {
-                long long target = -static_cast<long long>(nums[i]) - nums[j];
-                auto it = lower_bound(nums.begin() + j + 1, nums.end(), target);
+class Solution:
+    def threeSum(self, nums: list) -> list[list]:
+        counts = Counter(nums)
+        values = list(counts.keys())
+        triples = set()
 
-                if (it != nums.end() && *it == target) {
-                    uniqueTriples.insert({nums[i], nums[j], static_cast<int>(target)});
-                }
-            }
-        }
+        for i in range(len(values)):
+            for j in range(i, len(values)):
+                first = values[i]
+                second = values[j]
+                third = -first - second
 
-        return vector<vector<int>>(uniqueTriples.begin(), uniqueTriples.end());
-    }
-};
+                if third not in counts:
+                    continue
+
+                needed = Counter([first, second, third])
+                if all(counts[value] >= amount for value, amount in needed.items()):
+                    triples.add(tuple(sorted((first, second, third))))
+
+        return [list(triple) for triple in sorted(triples)]
