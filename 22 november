@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int characterReplacement(string s, int k) {
+        vector<int> frequency(26, 0);
+        int left = 0;
+        int mostCommon = 0;
+        int answer = 0;
+
+        for (int right = 0; right < static_cast<int>(s.size()); right++) {
+            int index = s[right] - 'A';
+            frequency[index]++;
+            mostCommon = max(mostCommon, frequency[index]);
+
+            while (right - left + 1 - mostCommon > k) {
+                frequency[s[left] - 'A']--;
+                left++;
+            }
+
+            answer = max(answer, right - left + 1);
+        }
+
+        return answer;
+    }
+};
